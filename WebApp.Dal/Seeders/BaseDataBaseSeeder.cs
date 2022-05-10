@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WebApp.Dal.Models;
 
 namespace WebApp.Dal.Seeders;
 
@@ -14,5 +15,14 @@ public class BaseDataBaseSeeder : IDataBaseSeeder
     public void Seed()
     {
         _context.Database.Migrate();
+        if (!_context.Accounts.Any())
+        {
+            _context.Accounts.Add(new AccountInfo
+            {
+                Login = "admin",
+                PasswordHash = "admin",
+            });
+            _context.SaveChanges();
+        }
     }
 }

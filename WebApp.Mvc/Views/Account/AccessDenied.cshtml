@@ -1,0 +1,21 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Access denied";
+    Layout = "_Layout";
+}
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <h2>Access denied for user: @User.Identity.Name</h2>
+}
+else
+{
+    <h2>Access denied.</h2>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+    </li>
+}

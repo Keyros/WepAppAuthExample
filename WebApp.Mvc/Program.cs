@@ -19,8 +19,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(x =>
     {
         x.LoginPath = "/Account/Login";
-        x.AccessDeniedPath = "/Account/Login";
+        x.AccessDeniedPath = "/Account/AccessDenied";
+        x.LogoutPath = "/Account/Logout";
     });
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAuthService, AuthService>();
@@ -28,6 +30,10 @@ builder.Services.AddTransient<IUserService, UserService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("EvaluatedUsers", policy => { policy.RequireRole("Admin", "Manager"); });
+});
 
 var app = builder.Build();
 

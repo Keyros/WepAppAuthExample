@@ -23,19 +23,22 @@ public class AuthService : IAuthService
             return false;
         }
 
-        if (login != "admin" || password != "admin")
+        var user = await _userService.GetAccountInfo(login);
+        if (user == null)
         {
             return false;
         }
 
-        var claims = new List<Claim>
+        if (user.PasswordHash != password)
         {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, login)
-        };
-        // создаем объект ClaimsIdentity
-        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookies",
-            ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-        // установка аутентификационных куки
+            return false;
+        }
+
+        var claims = await _userService.GetUserClaims(user);
+
+
+        var claimsIdentity = new ClaimsIdentity(claims, "Cookies", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
         await _contextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(claimsIdentity));
         return true;
@@ -46,5 +49,5 @@ public class AuthService : IAuthService
            Task.CompletedTask;
 
 
-    public bool IsAuthenticated => _contextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+    public bool IsAuthenticated => _contextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 }

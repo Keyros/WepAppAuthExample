@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Mvc.Models;
-using WebApp.Mvc.Services;
 using WebApp.Mvc.Services.Interfaces;
 
 namespace WebApp.Mvc.Controllers;
 
-[AllowAnonymous]
 public class AccountController : Controller
 {
     private readonly IAuthService _authService;
@@ -18,6 +16,7 @@ public class AccountController : Controller
 
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login()
     {
         if (_authService.IsAuthenticated)
@@ -27,8 +26,9 @@ public class AccountController : Controller
 
         return View();
     }
-    
+
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginModel loginModel)
     {
         if (await _authService.Login(loginModel.Login, loginModel.Password))
@@ -40,6 +40,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Register() => View();
 
     [Authorize]
@@ -48,5 +49,15 @@ public class AccountController : Controller
     {
         await _authService.Logout();
         return RedirectToAction("Login");
+    }
+
+    [AllowAnonymous]
+    public IActionResult AccessDenied() => View();
+
+    [HttpGet]
+    [Authorize(Policy = "EvaluatedUsers", Roles = "Admin,Manager")]
+    public IActionResult Test()
+    {
+        return Ok();
     }
 }
