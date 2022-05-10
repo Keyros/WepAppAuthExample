@@ -21,6 +21,7 @@ public class BaseDataBaseSeeder : IDataBaseSeeder
             {
                 Login = "admin",
                 PasswordHash = "admin",
+                RegistrationDate = DateTime.UtcNow
             });
             _context.SaveChanges();
         }
