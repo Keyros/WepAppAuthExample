@@ -8,9 +8,9 @@ public class WebAppDbContext : DbContext
     public WebAppDbContext(DbContextOptions<WebAppDbContext> options) : base(options)
     {
     }
-    
-    public DbSet<Note>? Notes { get; set; }
-    public DbSet<UserInfo>? Users { get; set; }
-    public DbSet<AccountInfo>? Accounts { get; set; }
-    public DbSet<Role>? Roles { get; set; }
+
+    public DbSet<Note> Notes { get; set; } = null!;
+    public DbSet<UserInfo> Users { get; set; } = null!;
+    public DbSet<AccountInfo> Accounts { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
 }
