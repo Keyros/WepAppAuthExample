@@ -7,6 +7,7 @@ using WebApp.Mvc.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddDbContext<WebAppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"),

@@ -6,6 +6,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Dal", "WebApp.Dal\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Dal.Migrations", "WebApp.Dal.Migrations\WebApp.Dal.Migrations.csproj", "{2FF25B06-1D45-4EF2-878E-6057BFA2471E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{CD140B87-446C-403E-B8AA-B245A67874C1}"
+	ProjectSection(SolutionItems) = preProject
+		WebApp.db = WebApp.db
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
