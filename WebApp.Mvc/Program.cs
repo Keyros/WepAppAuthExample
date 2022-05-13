@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApp.Dal;
 using WebApp.Dal.Seeders;
 using WebApp.Mvc.Authorization;
+using WebApp.Mvc.Authorization.Requirements;
 using WebApp.Mvc.Services;
 using WebApp.Mvc.Services.Interfaces;
 
@@ -21,6 +22,7 @@ builder.Services.AddDbContextFactory<WebAppDbContext>(x =>
 
 builder.Services.AddTransient<IDataBaseSeeder, BaseDataBaseSeeder>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandlerWithRequirement>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x =>
     {
@@ -38,7 +40,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("EvaluatedUsers", policy => { policy.RequireRole("Admin", "Manager"); });
+    options.AddPolicy("EvaluatedUsers", 
+        policy => { 
+            policy.RequireRole("Admin", "Manager"); });
 });
 
 var app = builder.Build();
