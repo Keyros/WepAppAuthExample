@@ -23,6 +23,7 @@ builder.Services.AddDbContextFactory<WebAppDbContext>(x =>
 builder.Services.AddTransient<IDataBaseSeeder, BaseDataBaseSeeder>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandlerWithRequirement>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, CustomPolicyProvider>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x =>
     {
@@ -40,6 +41,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthorization(options =>
 {
+ 
     options.AddPolicy("EvaluatedUsers", 
         policy => { 
             policy.RequireRole("Admin", "Manager"); });

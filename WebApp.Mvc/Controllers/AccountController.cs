@@ -55,7 +55,7 @@ public class AccountController : Controller
     public IActionResult AccessDenied() => View();
 
     [HttpGet]
-    [Authorize(Policy = "EvaluatedUsers", Roles = "Admin,Manager")]
+    [Authorize(Policy = "TestPolicy")]
     public IActionResult Test()
     {
         return Ok();
