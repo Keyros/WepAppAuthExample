@@ -1,20 +1,26 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Dal;
 using WebApp.Dal.Seeders;
+using WebApp.Mvc.Authorization;
 using WebApp.Mvc.Services;
 using WebApp.Mvc.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<WebAppDbContext>(options =>
+builder.Services.AddDbContextFactory<WebAppDbContext>(x =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"),
-        x => { x.MigrationsAssembly("WebApp.Dal"); });
+    x.UseSqlite(connectionString, optionsBuilder =>
+    {
+        optionsBuilder.MigrationsAssembly("WebApp.Dal");
+    });
 });
-builder.Services.AddTransient<IDataBaseSeeder, BaseDataBaseSeeder>();
 
+builder.Services.AddTransient<IDataBaseSeeder, BaseDataBaseSeeder>();
+builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x =>
     {
