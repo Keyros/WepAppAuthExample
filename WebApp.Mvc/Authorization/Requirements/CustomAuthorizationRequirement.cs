@@ -6,7 +6,8 @@ public class CustomAuthorizationRequirement : IAuthorizationRequirement
 {
     public CustomAuthorizationRequirement(string data)
     {
-        Data = data;  
+        Data = data;
     }
+
     public string Data { get; set; }
 }

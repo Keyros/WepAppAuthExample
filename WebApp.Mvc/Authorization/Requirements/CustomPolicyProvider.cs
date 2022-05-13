@@ -30,5 +30,5 @@ public class CustomPolicyProvider : IAuthorizationPolicyProvider
 
 
     public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
-    => FallbackPolicyProvider.GetFallbackPolicyAsync();
+        => FallbackPolicyProvider.GetFallbackPolicyAsync();
 }
