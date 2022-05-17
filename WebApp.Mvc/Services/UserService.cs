@@ -1,6 +1,4 @@
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
-using WebApp.Dal;
 using WebApp.Dal.Models;
 using WebApp.Mvc.Services.Interfaces;
 
@@ -8,15 +6,19 @@ namespace WebApp.Mvc.Services;
 
 public class UserService : IUserService
 {
-    private readonly WebAppDbContext _context;
+    private readonly IUserStore _userStore;
 
-    public UserService(WebAppDbContext context)
+    public UserService(IUserStore userStore)
     {
-        _context = context;
+        _userStore = userStore;
     }
 
+
     public Task<AccountInfo?> GetAccountInfo(string login)
-        => _context.Accounts.FirstOrDefaultAsync(x => x.Login == login);
+    {
+        var item = _userStore.GetAccounts().FirstOrDefault(x => x.Login == login);
+        return Task.FromResult(item);
+    }
 
     public Task<IEnumerable<Claim>> GetUserClaims(AccountInfo accountInfo)
     {
