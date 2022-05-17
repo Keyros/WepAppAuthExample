@@ -7,7 +7,7 @@ using WebApp.Mvc.Services.Interfaces;
 
 namespace WebApp.Mvc.Services;
 
-public class TokeService : ITokenService
+public class TokenService : ITokenService
 {
     public string GenerateAccessToken(IEnumerable<Claim> claims)
     {

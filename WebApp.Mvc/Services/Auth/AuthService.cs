@@ -91,4 +91,9 @@ public class AuthService : IAuthService
             Token = encodedJwt
         };
     }
+
+    public Task<AuthenticatedResponse?> RefreshTokens()
+    {
+        return Task.FromResult(null as AuthenticatedResponse);
+    }
 }

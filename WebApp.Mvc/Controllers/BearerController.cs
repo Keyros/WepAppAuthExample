@@ -30,7 +30,22 @@ public class BearerController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> RefreshToken()
     {
-        throw new NotImplementedException();
+        //получить 2 токена из тела
+        //проверить их на валидность AT
+        //достать информацию о пользователе
+        //проверить refreshToken который пришел с тем что в бд
+        //посмотреть он еще работает или нет
+        //сгенерить новую пару токенов 
+        //обновить accountInfo
+        //вернуть новые токены
+        
+        //если все плохо return Unauthorized();
+        var tokenData = await _authService.RefreshTokens();
+        if (tokenData == null)
+        {
+            return Unauthorized();
+        }
+        return Json(tokenData);
     }
 
 

@@ -52,7 +52,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserStore, MemoryUserStore>();
-builder.Services.AddTransient<ITokenService, TokeService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
