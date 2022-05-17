@@ -1,23 +1,22 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using WebApp.Mvc.Authorization.Bearer;
 using WebApp.Mvc.Services.Interfaces;
 
-namespace WebApp.Mvc.Services;
+namespace WebApp.Mvc.Services.Auth;
 
 public class AuthService : IAuthService
 {
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IUserService _userService;
+    private readonly ITokenService _tokenService;
 
-    public AuthService(IHttpContextAccessor contextAccessor, IUserService userService)
+    public AuthService(IHttpContextAccessor contextAccessor, IUserService userService, ITokenService tokenService)
     {
         _contextAccessor = contextAccessor;
         _userService = userService;
+        _tokenService = tokenService;
     }
 
     public async Task<bool> Login(string login, string password)
@@ -67,7 +66,7 @@ public class AuthService : IAuthService
 
     public bool IsAuthenticated => _contextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 
-    public async Task<(string token, string name)> GetToken(string login, string password)
+    public async Task<AuthenticatedResponse?> GetToken(string login, string password)
     {
         var claims = await GetUserClaims(login, password);
 
@@ -80,18 +79,16 @@ public class AuthService : IAuthService
             new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme, ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
 
+        var encodedJwt = _tokenService.GenerateAccessToken(claimsIdentity.Claims);
+        var refreshToken = _tokenService.GenerateRefreshToken();
+        var accountInfo = await _userService.GetAccountInfo(login);
+        accountInfo!.RefreshToken = refreshToken;
+        accountInfo!.RefreshTokenLifeTime = TimeSpan.FromDays(1);
 
-        var now = DateTime.UtcNow;
-        var jwt = new JwtSecurityToken(
-            issuer: AuthOptions.ISSUER,
-            audience: AuthOptions.AUDIENCE,
-            notBefore: now,
-            claims: claimsIdentity.Claims,
-            expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
-                SecurityAlgorithms.HmacSha256));
-        var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-        return (encodedJwt, claimsIdentity.Name ?? string.Empty);
+        return new AuthenticatedResponse
+        {
+            RefreshToken = refreshToken,
+            Token = encodedJwt
+        };
     }
 }

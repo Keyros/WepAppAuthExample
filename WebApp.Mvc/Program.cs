@@ -9,6 +9,7 @@ using WebApp.Mvc.Authorization;
 using WebApp.Mvc.Authorization.Bearer;
 using WebApp.Mvc.Authorization.Requirements;
 using WebApp.Mvc.Services;
+using WebApp.Mvc.Services.Auth;
 using WebApp.Mvc.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,6 +52,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserStore, MemoryUserStore>();
+builder.Services.AddTransient<ITokenService, TokeService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

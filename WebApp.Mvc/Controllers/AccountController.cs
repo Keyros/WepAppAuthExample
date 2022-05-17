@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Mvc.Models;
-using WebApp.Mvc.Services.Interfaces;
+using WebApp.Mvc.Services.Auth;
 
 namespace WebApp.Mvc.Controllers;
 
