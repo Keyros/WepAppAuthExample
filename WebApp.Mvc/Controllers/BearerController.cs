@@ -38,7 +38,6 @@ public class BearerController : Controller
         //сгенерить новую пару токенов 
         //обновить accountInfo
         //вернуть новые токены
-        
         //если все плохо return Unauthorized();
         var tokenData = await _authService.RefreshTokens();
         if (tokenData == null)
