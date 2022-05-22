@@ -48,4 +48,12 @@ public class UserService : IUserService
         });
         _webAppDbContext.SaveChanges();
     }
+
+    public async Task<Account?> GetAccountWithTokens(string login)
+    {
+        var item = await _webAppDbContext.Accounts
+            .Include(x => x.RefreshTokens)
+            .FirstAsync(x => x.Login == login);
+        return item;
+    }
 }

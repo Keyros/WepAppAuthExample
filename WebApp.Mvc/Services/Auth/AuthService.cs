@@ -83,7 +83,7 @@ public class AuthService : IAuthService
         var refreshToken = _tokenService.GenerateRefreshToken();
         var accountInfo = await _userService.GetAccount(login);
 
-        _userService.AddRefreshToken(accountInfo.Id, refreshToken, DateTime.UtcNow);
+        _userService.AddRefreshToken(accountInfo!.Id, refreshToken, DateTime.UtcNow);
 
         return new AuthenticatedResponse
         {
@@ -102,7 +102,7 @@ public class AuthService : IAuthService
 
         var name = claimsPrincipal.FindFirstValue(ClaimsIdentity.DefaultNameClaimType);
 
-        var accountInfo = await _userService.GetAccount(name);
+        var accountInfo = await _userService.GetAccountWithTokens(name);
         if (accountInfo == null)
         {
             return null;
