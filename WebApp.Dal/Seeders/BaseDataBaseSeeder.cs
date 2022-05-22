@@ -17,7 +17,7 @@ public class BaseDataBaseSeeder : IDataBaseSeeder
         _context.Database.Migrate();
         if (!_context.Accounts.Any())
         {
-            _context.Accounts.Add(new AccountInfo
+            _context.Accounts.Add(new Account
             {
                 Login = "admin",
                 PasswordHash = "admin",

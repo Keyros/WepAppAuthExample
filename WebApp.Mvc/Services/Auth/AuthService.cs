@@ -44,7 +44,7 @@ public class AuthService : IAuthService
 
     private async Task<IEnumerable<Claim>?> GetUserClaims(string login, string password)
     {
-        var user = await _userService.GetAccountInfo(login);
+        var user = await _userService.GetAccount(login);
         if (user == null)
         {
             return null;
@@ -81,9 +81,9 @@ public class AuthService : IAuthService
 
         var encodedJwt = _tokenService.GenerateAccessToken(claimsIdentity.Claims);
         var refreshToken = _tokenService.GenerateRefreshToken();
-        var accountInfo = await _userService.GetAccountInfo(login);
-        accountInfo!.RefreshToken = refreshToken;
-        accountInfo.RefreshTokenLifeTime = DateTime.UtcNow;
+        var accountInfo = await _userService.GetAccount(login);
+
+        _userService.AddRefreshToken(accountInfo.Id, refreshToken, DateTime.UtcNow);
 
         return new AuthenticatedResponse
         {
@@ -102,32 +102,26 @@ public class AuthService : IAuthService
 
         var name = claimsPrincipal.FindFirstValue(ClaimsIdentity.DefaultNameClaimType);
 
-        var accountInfo = await _userService.GetAccountInfo(name);
+        var accountInfo = await _userService.GetAccount(name);
         if (accountInfo == null)
         {
             return null;
         }
 
-        if (!string.Equals(accountInfo.RefreshToken, refreshTokenRequest.RefreshToken,
-                StringComparison.InvariantCultureIgnoreCase))
-        {
-            accountInfo.RefreshToken = null;
-            accountInfo.RefreshTokenLifeTime = null;
-            return null;
-        }
+        var tokenInfo = accountInfo.RefreshTokens.FirstOrDefault(x =>
+            x.Token == refreshTokenRequest.RefreshToken &&
+            DateTime.UtcNow - x.RefreshTokenLifeTime <=
+            TimeSpan.FromMinutes(1));
 
-        if (DateTime.UtcNow - accountInfo.RefreshTokenLifeTime >= TimeSpan.FromMinutes(1))
+        if (tokenInfo == null)
         {
-            accountInfo.RefreshToken = null;
-            accountInfo.RefreshTokenLifeTime = null;
             return null;
         }
 
         var token = _tokenService.GenerateAccessToken(claimsPrincipal.Claims);
         var refresh = _tokenService.GenerateRefreshToken();
-        
-        accountInfo.RefreshToken = refresh;
-        accountInfo.RefreshTokenLifeTime = DateTime.UtcNow;
+
+        _userService.AddRefreshToken(accountInfo.Id, refresh, DateTime.UtcNow);
 
         return new AuthenticatedResponse
         {

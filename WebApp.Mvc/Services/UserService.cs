@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using WebApp.Dal;
 using WebApp.Dal.Models;
 using WebApp.Mvc.Services.Interfaces;
 
@@ -6,33 +8,44 @@ namespace WebApp.Mvc.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserStore _userStore;
+    private readonly WebAppDbContext _webAppDbContext;
 
-    public UserService(IUserStore userStore)
+    public UserService(WebAppDbContext webAppDbContext)
     {
-        _userStore = userStore;
+        _webAppDbContext = webAppDbContext;
     }
 
 
-    public Task<AccountInfo?> GetAccountInfo(string login)
+    public async Task<Account?> GetAccount(string login)
     {
-        var item = _userStore.GetAccounts().FirstOrDefault(x => x.Login == login);
-        return Task.FromResult(item);
+        var item = await _webAppDbContext.Accounts.FirstAsync(x => x.Login == login);
+        return item;
     }
 
-    public Task<IEnumerable<Claim>> GetUserClaims(AccountInfo accountInfo)
+    public Task<IEnumerable<Claim>> GetUserClaims(Account account)
     {
         var claims = new List<Claim>
         {
-            new(ClaimsIdentity.DefaultNameClaimType, accountInfo.Login),
+            new(ClaimsIdentity.DefaultNameClaimType, account.Login),
         };
 
-        if (accountInfo.Login == "admin")
+        if (account.Login == "admin")
         {
             claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, "Admin"));
             claims.Add(new Claim("EvaluatedUsers", "true"));
         }
 
         return Task.FromResult<IEnumerable<Claim>>(claims);
+    }
+
+    public void AddRefreshToken(int id, string refresh, DateTime utcNow)
+    {
+        _webAppDbContext.RefreshTokens.Add(new RefreshToken
+        {
+            AccountId = id,
+            Token = refresh,
+            RefreshTokenLifeTime = utcNow,
+        });
+        _webAppDbContext.SaveChanges();
     }
 }

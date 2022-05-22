@@ -11,6 +11,7 @@ public class WebAppDbContext : DbContext
 
     public DbSet<Note> Notes { get; set; } = null!;
     public DbSet<UserInfo> Users { get; set; } = null!;
-    public DbSet<AccountInfo> Accounts { get; set; } = null!;
+    public DbSet<Account> Accounts { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 }
