@@ -63,7 +63,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddSingleton<IUserStore, MemoryUserStore>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
