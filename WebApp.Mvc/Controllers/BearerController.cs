@@ -28,9 +28,8 @@ public class BearerController : Controller
 
     [HttpPost("[controller]/refresh")]
     [AllowAnonymous]
-    public async Task<IActionResult> RefreshToken()
+    public async Task<IActionResult> RefreshToken([FromBody]RefreshTokenRequest request)
     {
-        //получить 2 токена из тела
         //проверить их на валидность AT
         //достать информацию о пользователе
         //проверить refreshToken который пришел с тем что в бд
@@ -39,7 +38,7 @@ public class BearerController : Controller
         //обновить accountInfo
         //вернуть новые токены
         //если все плохо return Unauthorized();
-        var tokenData = await _authService.RefreshTokens();
+        var tokenData = await _authService.RefreshTokens(request);
         if (tokenData == null)
         {
             return Unauthorized();

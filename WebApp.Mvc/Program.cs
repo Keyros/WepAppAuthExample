@@ -54,16 +54,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 {
                     context.Response.Headers.Add("Token-Expired", "true");
                 }
+
                 return Task.CompletedTask;
             },
-            
         };
     });
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IUserStore, MemoryUserStore>();
+builder.Services.AddSingleton<IUserStore, MemoryUserStore>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();

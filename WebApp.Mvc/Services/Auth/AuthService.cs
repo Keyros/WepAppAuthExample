@@ -83,7 +83,7 @@ public class AuthService : IAuthService
         var refreshToken = _tokenService.GenerateRefreshToken();
         var accountInfo = await _userService.GetAccountInfo(login);
         accountInfo!.RefreshToken = refreshToken;
-        accountInfo!.RefreshTokenLifeTime = TimeSpan.FromDays(1);
+        accountInfo.RefreshTokenLifeTime = DateTime.UtcNow;
 
         return new AuthenticatedResponse
         {
@@ -92,8 +92,47 @@ public class AuthService : IAuthService
         };
     }
 
-    public Task<AuthenticatedResponse?> RefreshTokens()
+    public async Task<AuthenticatedResponse?> RefreshTokens(RefreshTokenRequest refreshTokenRequest)
     {
-        return Task.FromResult(null as AuthenticatedResponse);
+        var claimsPrincipal = _tokenService.GetPrincipalFromExpiredToken(refreshTokenRequest.Token!);
+        if (claimsPrincipal == null)
+        {
+            return null;
+        }
+
+        var name = claimsPrincipal.FindFirstValue(ClaimsIdentity.DefaultNameClaimType);
+
+        var accountInfo = await _userService.GetAccountInfo(name);
+        if (accountInfo == null)
+        {
+            return null;
+        }
+
+        if (!string.Equals(accountInfo.RefreshToken, refreshTokenRequest.RefreshToken,
+                StringComparison.InvariantCultureIgnoreCase))
+        {
+            accountInfo.RefreshToken = null;
+            accountInfo.RefreshTokenLifeTime = null;
+            return null;
+        }
+
+        if (DateTime.UtcNow - accountInfo.RefreshTokenLifeTime >= TimeSpan.FromMinutes(1))
+        {
+            accountInfo.RefreshToken = null;
+            accountInfo.RefreshTokenLifeTime = null;
+            return null;
+        }
+
+        var token = _tokenService.GenerateAccessToken(claimsPrincipal.Claims);
+        var refresh = _tokenService.GenerateRefreshToken();
+        
+        accountInfo.RefreshToken = refresh;
+        accountInfo.RefreshTokenLifeTime = DateTime.UtcNow;
+
+        return new AuthenticatedResponse
+        {
+            RefreshToken = refresh,
+            Token = token
+        };
     }
 }

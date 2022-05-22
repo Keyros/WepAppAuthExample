@@ -6,5 +6,5 @@ public interface IAuthService
     Task Logout();
     bool IsAuthenticated { get; }
     Task<AuthenticatedResponse?> GetToken(string login, string password);
-    Task<AuthenticatedResponse?> RefreshTokens();
+    Task<AuthenticatedResponse?> RefreshTokens(RefreshTokenRequest refreshTokenRequest);
 }

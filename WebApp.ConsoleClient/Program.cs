@@ -1,6 +1,9 @@
 ﻿using WebApp.ConsoleClient;
 using WebApp.ConsoleClient.Handlers;
 
+var login = args.FirstOrDefault(x => x.Contains("login"))?.Split('=', StringSplitOptions.RemoveEmptyEntries).Last();
+var path = args.FirstOrDefault(x => x.Contains("pass"))?.Split('=', StringSplitOptions.RemoveEmptyEntries).Last();
+
 var tokesSource = new TokenStore();
 
 var httpClientHandler = new HttpClientHandler
@@ -8,7 +11,7 @@ var httpClientHandler = new HttpClientHandler
     ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
 };
 var refreshTokenHandler = new RefreshTokenHandler(httpClientHandler, tokesSource);
-var authHandler = new AuthenticateHandler(refreshTokenHandler, "admin", "admin", tokesSource);
+var authHandler = new AuthenticateHandler(refreshTokenHandler, login, path, tokesSource);
 var httpClient = new HttpClient(authHandler);
 httpClient.BaseAddress = new Uri("https://localhost:7014/");
 
