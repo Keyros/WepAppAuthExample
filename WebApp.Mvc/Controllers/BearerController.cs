@@ -15,9 +15,9 @@ public class BearerController : Controller
 
     [AllowAnonymous]
     [HttpPost("[controller]/token")]
-    public async Task<IActionResult> Token(string username, string password)
+    public async Task<IActionResult> Token([FromBody]AuthenticateRequest request)
     {
-        var tokenData = await _authService.GetToken(username, password);
+        var tokenData = await _authService.GetToken(request);
         if (tokenData == null)
         {
             return Unauthorized();

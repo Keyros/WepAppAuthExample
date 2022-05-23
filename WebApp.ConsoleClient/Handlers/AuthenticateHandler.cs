@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace WebApp.ConsoleClient.Handlers;
@@ -43,9 +44,18 @@ public class AuthenticateHandler : DelegatingHandler
     private async Task<AuthenticatedResponse> Login(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var baseUri = $"{request.RequestUri!.Scheme}://{request.RequestUri.Authority}";
-        var requestUri = new Uri($"{baseUri}/bearer/token?username={_login}&password={_password}");
+        var requestUri = new Uri($"{baseUri}/bearer/token");
+        var loginRequest = new LoginRequest()
+        {
+            Password = _password,
+            Login = _login
+        };
 
         var loginRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri);
+
+        var body = new StringContent(JsonSerializer.Serialize(loginRequest), Encoding.UTF8,
+            "application/json");
+        loginRequestMessage.Content = body;
         using var responseMessage = await base.SendAsync(loginRequestMessage, cancellationToken);
         responseMessage.EnsureSuccessStatusCode();
         var loginResponse = await responseMessage.Content.ReadAsStringAsync(cancellationToken);

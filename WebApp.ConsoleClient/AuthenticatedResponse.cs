@@ -10,6 +10,14 @@ public class AuthenticatedResponse
     public string? RefreshToken { get; set; }
 }
 
+public class LoginRequest
+{
+    [JsonPropertyName("login")]
+    public string? Login { get; set; }
+    [JsonPropertyName("password")]
+    public string? Password { get; set; }
+}
+
 public class RefreshTokenRequest
 {
     [JsonPropertyName("token")]

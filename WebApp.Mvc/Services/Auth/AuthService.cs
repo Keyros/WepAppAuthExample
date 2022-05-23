@@ -66,9 +66,9 @@ public class AuthService : IAuthService
 
     public bool IsAuthenticated => _contextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 
-    public async Task<AuthenticatedResponse?> GetToken(string login, string password)
+    public async Task<AuthenticateResponse?> GetToken(AuthenticateRequest request)
     {
-        var claims = await GetUserClaims(login, password);
+        var claims = await GetUserClaims(request.Login, request.Password);
 
         if (claims == null)
         {
@@ -81,18 +81,18 @@ public class AuthService : IAuthService
 
         var encodedJwt = _tokenService.GenerateAccessToken(claimsIdentity.Claims);
         var refreshToken = _tokenService.GenerateRefreshToken();
-        var accountInfo = await _userService.GetAccount(login);
+        var accountInfo = await _userService.GetAccount(request.Login);
 
         _userService.AddRefreshToken(accountInfo!.Id, refreshToken, DateTime.UtcNow);
 
-        return new AuthenticatedResponse
+        return new AuthenticateResponse
         {
             RefreshToken = refreshToken,
             Token = encodedJwt
         };
     }
 
-    public async Task<AuthenticatedResponse?> RefreshTokens(RefreshTokenRequest refreshTokenRequest)
+    public async Task<AuthenticateResponse?> RefreshTokens(RefreshTokenRequest refreshTokenRequest)
     {
         var claimsPrincipal = _tokenService.GetPrincipalFromExpiredToken(refreshTokenRequest.Token!);
         if (claimsPrincipal == null)
@@ -123,7 +123,7 @@ public class AuthService : IAuthService
 
         _userService.AddRefreshToken(accountInfo.Id, refresh, DateTime.UtcNow);
 
-        return new AuthenticatedResponse
+        return new AuthenticateResponse
         {
             RefreshToken = refresh,
             Token = token
