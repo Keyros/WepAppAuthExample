@@ -29,7 +29,7 @@ public class UserService : IUserService
             new(ClaimsIdentity.DefaultNameClaimType, account.Login),
         };
 
-        if (account.Login == "admin")
+        if (account.Login is "admin" or "rasim")
         {
             claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, "Admin"));
             claims.Add(new Claim("EvaluatedUsers", "true"));
