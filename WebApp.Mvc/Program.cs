@@ -11,6 +11,7 @@ using WebApp.Mvc.Authorization.Requirements;
 using WebApp.Mvc.Services;
 using WebApp.Mvc.Services.Auth;
 using WebApp.Mvc.Services.Interfaces;
+using WebApp.Mvc.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +80,8 @@ builder.Services.AddAuthorization(options =>
         policy => { policy.RequireRole("Admin", "Manager"); });
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 //intialize the database
@@ -108,5 +111,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<SimpleChatHub>("/chatHub");
 
 app.Run();
