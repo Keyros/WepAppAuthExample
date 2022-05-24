@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{CD140B87-4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.ConsoleClient", "WebApp.ConsoleClient\WebApp.ConsoleClient.csproj", "{2A0B412E-2D01-45EF-8978-C1D02ABEE1C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.ConsoleClient.SignalR", "WebApp.ConsoleClient.SignalR\WebApp.ConsoleClient.SignalR.csproj", "{2A6202FB-BD3A-4EF1-8E1A-994E07AF3F88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +37,9 @@ Global
 		{2A0B412E-2D01-45EF-8978-C1D02ABEE1C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A0B412E-2D01-45EF-8978-C1D02ABEE1C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A0B412E-2D01-45EF-8978-C1D02ABEE1C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A6202FB-BD3A-4EF1-8E1A-994E07AF3F88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A6202FB-BD3A-4EF1-8E1A-994E07AF3F88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A6202FB-BD3A-4EF1-8E1A-994E07AF3F88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A6202FB-BD3A-4EF1-8E1A-994E07AF3F88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
