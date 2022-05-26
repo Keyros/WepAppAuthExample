@@ -15,6 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.ConsoleClient", "Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.ConsoleClient.SignalR", "WebApp.ConsoleClient.SignalR\WebApp.ConsoleClient.SignalR.csproj", "{2A6202FB-BD3A-4EF1-8E1A-994E07AF3F88}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".infrastucture", ".infrastucture", "{255C16C1-0466-4C48-B88C-512DE591E70C}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
