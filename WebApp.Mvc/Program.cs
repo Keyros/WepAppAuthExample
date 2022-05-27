@@ -19,6 +19,7 @@ var connectionString = builder.Configuration.GetConnectionString("PostgresConnec
 
 builder.Services.AddDbContextFactory<WebAppDbContext>(x =>
 {
+    // ghbdtn
     // x.UseSqlite(connectionString, optionsBuilder => { optionsBuilder.MigrationsAssembly("WebApp.Dal"); });
     x.UseNpgsql(connectionString, optionsBuilder => { optionsBuilder.MigrationsAssembly("WebApp.Dal"); });
 });
