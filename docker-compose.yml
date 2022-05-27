@@ -9,6 +9,18 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  
+  postgres:
+    container_name: postgres
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5400:5400"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  
   webapp:
     container_name: webApp
     build:

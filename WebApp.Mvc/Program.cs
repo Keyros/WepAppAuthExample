@@ -15,11 +15,12 @@ using WebApp.Mvc.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 
 builder.Services.AddDbContextFactory<WebAppDbContext>(x =>
 {
-    x.UseSqlite(connectionString, optionsBuilder => { optionsBuilder.MigrationsAssembly("WebApp.Dal"); });
+    // x.UseSqlite(connectionString, optionsBuilder => { optionsBuilder.MigrationsAssembly("WebApp.Dal"); });
+    x.UseNpgsql(connectionString, optionsBuilder => { optionsBuilder.MigrationsAssembly("WebApp.Dal"); });
 });
 
 builder.Services.AddTransient<IDataBaseSeeder, BaseDataBaseSeeder>();

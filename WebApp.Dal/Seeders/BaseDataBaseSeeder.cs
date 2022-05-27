@@ -19,12 +19,14 @@ public class BaseDataBaseSeeder : IDataBaseSeeder
         {
             _context.Accounts.Add(new Account
             {
+                Id = 1,
                 Login = "admin",
                 PasswordHash = "admin",
                 RegistrationDate = DateTime.UtcNow
             }); 
             _context.Accounts.Add(new Account
             {
+                Id = 2,
                 Login = "rasim",
                 PasswordHash = "rasim",
                 RegistrationDate = DateTime.UtcNow
