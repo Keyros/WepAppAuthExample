@@ -10,7 +10,7 @@ public class Message<T> : Message
     public T? Body { get; set; }
 }
 
-public class Message
+public abstract class Message
 {
     public Guid Id { get; } = Guid.NewGuid();
     public DateTime DateTime { get; } = DateTime.UtcNow;
