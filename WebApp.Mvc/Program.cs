@@ -68,8 +68,34 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+
+builder.Services.Configure<RequestLocalizationOptions>(x =>
+{
+
+    x.SupportedUICultures = new List<CultureInfo>
+    {
+        new("en-US"),
+        new("ru-RU"),
+        new("es-ES"),
+    };
+    x.SupportedCultures = new List<CultureInfo>
+    {
+        new("en-US"),
+        new("ru-RU"),
+        new("es-ES"),
+    };
+    x.DefaultRequestCulture = new RequestCulture("ru-RU");
+});
+
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddDataAnnotationsLocalization()
+    .AddMvcLocalization()
+    .AddViewLocalization(x =>
+    {
+        
+        x.ResourcesPath = "Resources";
+    });
 
 builder.Services.AddAuthorization(options =>
 {
@@ -85,19 +111,12 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSignalR();
 
+
+
 var app = builder.Build();
 
+app.UseRequestLocalization();
 
-app.UseRequestLocalization(x =>
-{
-
-    x.DefaultRequestCulture = new RequestCulture("en-US");
-    x.SupportedUICultures = new List<CultureInfo>
-    {
-        new CultureInfo("en-US"),
-        new CultureInfo("ru-RU"),
-    };
-});
 
 //intialize the database
 using (var scope = app.Services.CreateScope())
