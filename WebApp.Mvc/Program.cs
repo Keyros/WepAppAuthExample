@@ -1,6 +1,8 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApp.Dal;
@@ -84,6 +86,18 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddSignalR();
 
 var app = builder.Build();
+
+
+app.UseRequestLocalization(x =>
+{
+
+    x.DefaultRequestCulture = new RequestCulture("en-US");
+    x.SupportedUICultures = new List<CultureInfo>
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("ru-RU"),
+    };
+});
 
 //intialize the database
 using (var scope = app.Services.CreateScope())
