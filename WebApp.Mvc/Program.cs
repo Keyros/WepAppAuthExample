@@ -25,7 +25,6 @@ builder.Services.AddDbContextFactory<WebAppDbContext>(x =>
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandlerWithRequirement>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, CustomPolicyProvider>();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, x =>
     {
         x.LoginPath = "/Account/Login";
