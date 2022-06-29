@@ -22,7 +22,6 @@ builder.Services.AddDbContextFactory<WebAppDbContext>(x =>
     x.UseSqlite(connectionString, optionsBuilder => { optionsBuilder.MigrationsAssembly("WebApp.Dal"); });
 });
 
-builder.Services.AddTransient<IDataBaseSeeder, BaseDataBaseSeeder>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CustomAuthorizationHandlerWithRequirement>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, CustomPolicyProvider>();
